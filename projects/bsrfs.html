@@ -1,0 +1,692 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BSRFS | Barangay Ermita Service Request and Feedback System</title>
+  <meta name="description"
+        content="Barangay Ermita Service Request and Feedback System, a community-focused web development project.">
+
+  <style>
+    :root {
+      --bg: #0b0b12;
+      --surface: #13131f;
+      --text: #f4f1ff;
+      --muted: #a5a2b8;
+      --accent: #a78bfa;
+      --border: #29283b;
+      --max-width: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(var(--max-width), 90%);
+      margin: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(11, 11, 18, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .logo span,
+    .accent {
+      color: var(--accent);
+    }
+
+    .back-link {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .hero {
+      padding: 100px 0 75px;
+      background:
+        radial-gradient(ellipse at 80% 20%, #7c3aed20, transparent 45%),
+        var(--bg);
+    }
+
+    .eyebrow,
+    .section-label {
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 950px;
+      margin: 22px 0;
+      font-size: clamp(2.5rem, 6vw, 4.7rem);
+      line-height: 1.1;
+      letter-spacing: -2px;
+    }
+
+    h2 {
+      margin: 8px 0 18px;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .hero p,
+    .section-intro {
+      max-width: 750px;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #151020;
+      border-color: var(--accent);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    section {
+      padding: 75px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-intro {
+      margin-bottom: 32px;
+    }
+
+    .featured-image {
+      display: block;
+      width: 100%;
+      max-height: 550px;
+      min-height: 220px;
+      object-fit: contain;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .image-caption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .about-grid,
+    .feature-grid,
+    .process-grid,
+    .info-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .about-grid {
+      grid-template-columns: 1.3fr 0.7fr;
+      align-items: start;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .process-grid,
+    .info-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card,
+    .info-item {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .card p,
+    .about-copy p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .about-copy p + p {
+      margin-top: 15px;
+    }
+
+    .card-number {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .tags span {
+      padding: 6px 11px;
+      color: #d9ceff;
+      background: #a78bfa12;
+      border: 1px solid #a78bfa35;
+      border-radius: 30px;
+      font-size: 0.8rem;
+    }
+
+    .info-item small {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+    }
+
+    .info-item p {
+      font-weight: 600;
+    }
+
+    .status {
+      color: var(--accent);
+    }
+
+    .contact {
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg), #171225);
+    }
+
+    .contact .section-intro {
+      margin: 0 auto;
+    }
+
+    .contact .actions {
+      justify-content: center;
+    }
+
+    footer {
+      padding: 25px 0;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .hero {
+        padding: 70px 0 55px;
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      .feature-grid,
+      .process-grid,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card,
+      .info-item {
+        padding: 20px;
+      }
+
+      .nav {
+        min-height: 62px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container nav">
+      <a class="logo" href="../index.html">
+        MY<span>PORTFOLIO</span>
+      </a>
+
+      <a class="back-link" href="../index.html">
+        ← Back to Portfolio
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" style="border-top: 0;">
+      <div class="container">
+        <p class="eyebrow">Web Development · Community Information System</p>
+
+        <h1>
+          Barangay Ermita<br>
+          <span class="accent">Service Request and Feedback System</span>
+        </h1>
+
+        <p>
+          Connecting Communities, Enhancing Services.
+          A web-based system designed to help residents submit
+          barangay service requests and provide feedback through
+          an organized online platform.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="#overview">
+            Explore Project ↓
+          </a>
+
+          <a class="button" href="#contact">
+            Contact Me ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED SCREENSHOT -->
+    <section id="featured">
+      <div class="container">
+        <p class="section-label">Featured Project</p>
+        <h2>Inside BSRFS</h2>
+
+        <p class="section-intro">
+          Explore the system's resident interface and its approach
+          to organizing service requests and feedback.
+        </p>
+
+        <img
+          class="featured-image"
+          src="../images/bsrfs.png"
+          alt="Barangay Ermita Service Request and Feedback System interface"
+        >
+
+        <p class="image-caption">
+          BSRFS interface preview. Replace this image with a
+          screenshot from your actual application.
+        </p>
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+      <div class="container">
+        <p class="section-label">About the Project</p>
+        <h2>Connecting Residents with Barangay Services</h2>
+
+        <div class="about-grid">
+          <div class="about-copy">
+            <p>
+              The Barangay Ermita Service Request and Feedback
+              System (BSRFS) is a web application developed to
+              provide residents with a more organized way to
+              communicate their service needs and feedback.
+            </p>
+
+            <p>
+              The system provides a resident-facing interface
+              where users can access the available services and
+              submit requests. It aims to make request handling
+              more accessible and reduce dependence on
+              unorganized manual communication.
+            </p>
+
+            <p>
+              The project uses PHP for server-side processing
+              and MySQL for database-related functionality.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Project at a Glance</h3>
+            <p>
+              A community-focused web system intended to improve
+              access to barangay services and resident feedback.
+            </p>
+
+            <div class="tags">
+              <span>Community Service</span>
+              <span>Web Application</span>
+              <span>PHP</span>
+              <span>MySQL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section>
+      <div class="container">
+        <p class="section-label">Core Functions</p>
+        <h2>System Features</h2>
+
+        <p class="section-intro">
+          The project focuses on making resident service requests
+          and feedback more organized.
+        </p>
+
+        <div class="feature-grid">
+
+          <article class="card">
+            <span class="card-number">01</span>
+            <h3>Resident Access</h3>
+            <p>
+              Session-based access for residents using the
+              functionality supported by the application.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">02</span>
+            <h3>Service Requests</h3>
+            <p>
+              A way for residents to submit requests for
+              available barangay services through the website.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">03</span>
+            <h3>Request Categories</h3>
+            <p>
+              Organized request categories, including skills
+              training or workshop requests.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">04</span>
+            <h3>Feedback Collection</h3>
+            <p>
+              A channel for residents to share feedback about
+              their service experience, where implemented.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">05</span>
+            <h3>Resident Interface</h3>
+            <p>
+              A resident-facing layout with navigation to
+              relevant service and request functions.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">06</span>
+            <h3>Organized Information</h3>
+            <p>
+              Structured request information to support more
+              consistent recordkeeping and follow-up.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVELOPMENT -->
+    <section>
+      <div class="container">
+        <p class="section-label">Behind the Scenes</p>
+        <h2>Development Process</h2>
+
+        <p class="section-intro">
+          The project brings together interface design,
+          server-side development, and database integration.
+        </p>
+
+        <div class="process-grid">
+          <article class="card">
+            <span class="card-number">01</span>
+            <h3>Interface Design</h3>
+            <p>
+              Organizing the resident sidebar, navigation,
+              and service request pages to make key functions
+              easier to find.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">02</span>
+            <h3>Server-Side Development</h3>
+            <p>
+              Using PHP sessions and application logic to
+              support the resident-facing website.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">03</span>
+            <h3>Database Integration</h3>
+            <p>
+              Using MySQL to support the application's
+              data storage requirements.
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">04</span>
+            <h3>Styling and Usability</h3>
+            <p>
+              Applying Tailwind CSS and interface styling
+              to establish a consistent and accessible
+              resident experience.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT GOALS -->
+    <section>
+      <div class="container">
+        <p class="section-label">Project Purpose</p>
+        <h2>Why BSRFS Matters</h2>
+
+        <div class="feature-grid">
+          <article class="card">
+            <h3>Accessibility</h3>
+            <p>
+              Provide residents with an online way to access
+              available service request functions.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Organization</h3>
+            <p>
+              Help structure service requests and related
+              information for easier reference.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Communication</h3>
+            <p>
+              Support communication between residents and
+              barangay services through requests and feedback.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNOLOGIES -->
+    <section>
+      <div class="container">
+        <p class="section-label">Development Tools</p>
+        <h2>Technologies Used</h2>
+
+        <p class="section-intro">
+          Tools used to build and style the web application.
+        </p>
+
+        <div class="tags">
+          <span>PHP</span>
+          <span>MySQL</span>
+          <span>HTML</span>
+          <span>CSS</span>
+          <span>JavaScript</span>
+          <span>Tailwind CSS</span>
+          <span>Font Awesome</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT DETAILS -->
+    <section>
+      <div class="container">
+        <p class="section-label">Project Details</p>
+        <h2>Project Information</h2>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <small>Project Name</small>
+            <p>Barangay Ermita Service Request and Feedback System</p>
+          </div>
+
+          <div class="info-item">
+            <small>Project Type</small>
+            <p>Community Web Application</p>
+          </div>
+
+          <div class="info-item">
+            <small>Primary Users</small>
+            <p>Barangay Residents</p>
+          </div>
+
+          <div class="info-item">
+            <small>My Contribution</small>
+            <p>Update this field to describe your actual work.</p>
+          </div>
+
+          <div class="info-item">
+            <small>Project Status</small>
+            <p class="status">Previously Developed</p>
+          </div>
+
+          <div class="info-item">
+            <small>Project Goal</small>
+            <p>Organize service requests and resident feedback</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <p class="section-label">Let's Connect</p>
+        <h2>Interested in My Work?</h2>
+
+        <p class="section-intro">
+          Explore my other projects and learn more about
+          my experience in web development and programming.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="../index.html">
+            Back to My Portfolio
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <p>BSRFS — Connecting Communities, Enhancing Services</p>
+      <p>Web Development Project</p>
+    </div>
+  </footer>
+
+</body>
+</html>

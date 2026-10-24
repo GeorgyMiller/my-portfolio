@@ -1,0 +1,691 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Knight's Quest | Game Development Project</title>
+  <meta name="description"
+        content="Explore Knight's Quest, a 2D platformer game developed using Unity and C#.">
+
+  <style>
+    :root {
+      --bg: #0b0b12;
+      --surface: #13131f;
+      --surface2: #191927;
+      --text: #f4f1ff;
+      --muted: #a5a2b8;
+      --accent: #a78bfa;
+      --border: #29283b;
+      --max-width: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(var(--max-width), 90%);
+      margin: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(11, 11, 18, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .logo span,
+    .accent {
+      color: var(--accent);
+    }
+
+    .back-link {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .hero {
+      padding: 100px 0 75px;
+      background:
+        radial-gradient(ellipse at 80% 20%, #7c3aed20, transparent 45%),
+        var(--bg);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 22px 0;
+      font-size: clamp(2.7rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -3px;
+    }
+
+    .hero p,
+    .section-intro {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #151020;
+      border-color: var(--accent);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    section {
+      padding: 75px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 8px 0 18px;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .section-intro {
+      margin-bottom: 32px;
+    }
+
+    .featured-image {
+      display: block;
+      width: 100%;
+      min-height: 220px;
+      max-height: 560px;
+      object-fit: contain;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .image-caption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .about-grid,
+    .feature-grid,
+    .process-grid,
+    .challenge-grid,
+    .info-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .about-grid {
+      grid-template-columns: 1.3fr 0.7fr;
+      align-items: start;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .process-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .challenge-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .info-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .card p,
+    .about-copy p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .about-copy p + p {
+      margin-top: 15px;
+    }
+
+    .card-number {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .tags span {
+      padding: 6px 11px;
+      color: #d9ceff;
+      background: #a78bfa12;
+      border: 1px solid #a78bfa35;
+      border-radius: 30px;
+      font-size: 0.8rem;
+    }
+
+    .info-item {
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .info-item small {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+    }
+
+    .info-item p {
+      font-weight: 600;
+    }
+
+    .status {
+      color: var(--accent);
+    }
+
+    .contact {
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg), #171225);
+    }
+
+    .contact .section-intro {
+      margin: 0 auto;
+    }
+
+    .contact .actions {
+      justify-content: center;
+    }
+
+    footer {
+      padding: 25px 0;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .hero {
+        padding: 70px 0 55px;
+      }
+
+      h1 {
+        letter-spacing: -1.5px;
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      .feature-grid,
+      .process-grid,
+      .challenge-grid,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .nav {
+        min-height: 62px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container nav">
+      <a class="logo" href="../index.html">
+        MY<span>PORTFOLIO</span>
+      </a>
+
+      <a class="back-link" href="../index.html">
+        ← Back to Portfolio
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" style="border-top: 0;">
+      <div class="container">
+        <p class="eyebrow">Game Development · Unity 2D</p>
+
+        <h1>Knight's Quest:<br><span class="accent">Rescue the Princess</span></h1>
+
+        <p>
+          A 2D fantasy platformer where a brave knight explores
+          dangerous environments, faces enemies, overcomes
+          obstacles, and sets out to rescue the princess.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="#featured">
+            Explore Project ↓
+          </a>
+
+          <a class="button" href="#contact">
+            Contact Me ↗
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED GAMEPLAY -->
+    <section id="featured">
+      <div class="container">
+        <p class="section-label">Featured Project</p>
+        <h2>Inside Knight's Quest</h2>
+
+        <p class="section-intro">
+          Explore the game's environment, characters, combat
+          mechanics, and development progress.
+        </p>
+
+        <img
+          class="featured-image"
+          src="../images/WWW.jpg"
+          alt="Knight's Quest gameplay screenshot"
+        >
+
+        <p class="image-caption">
+          Knight's Quest — gameplay preview. Replace this image
+          with a screenshot from your actual game.
+        </p>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section>
+      <div class="container">
+        <p class="section-label">About the Project</p>
+        <h2>Building a Fantasy Adventure</h2>
+
+        <div class="about-grid">
+          <div class="about-copy">
+            <p>
+              Knight's Quest: Rescue the Princess is a 2D platformer
+              developed with Unity. The player controls a knight who
+              must navigate platforms, overcome environmental
+              obstacles, and face enemies during the adventure.
+            </p>
+
+            <p>
+              The project combines gameplay programming, character
+              sprites and animations, 2D physics, health management,
+              and enemy behavior to create an interactive game.
+            </p>
+
+            <p>
+              The game is still in development, with one playable
+              map prepared for demonstration.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Project at a Glance</h3>
+            <p>A student game development project focused on
+              learning and implementing 2D gameplay systems.</p>
+
+            <div class="tags">
+              <span>2D Platformer</span>
+              <span>Pixel Art</span>
+              <span>Student Project</span>
+              <span>In Development</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section>
+      <div class="container">
+        <p class="section-label">What It Includes</p>
+        <h2>Gameplay Features</h2>
+
+        <p class="section-intro">
+          The current project focuses on player controls, combat,
+          enemy interactions, and character systems.
+        </p>
+
+        <div class="feature-grid">
+          <article class="card">
+            <span class="card-number">01</span>
+            <h3>Player Movement</h3>
+            <p>Horizontal movement, jumping, and ground detection
+              to support platforming gameplay.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">02</span>
+            <h3>Combat System</h3>
+            <p>Player attacks, attack combos, and a defending
+              mechanic connected to character animations.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">03</span>
+            <h3>Enemy AI</h3>
+            <p>Enemy behavior that includes detecting the player,
+              moving closer, and performing attacks.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">04</span>
+            <h3>Health and Damage</h3>
+            <p>Health tracking, damage handling, and visual feedback
+              when characters take damage.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">05</span>
+            <h3>Boss Encounter</h3>
+            <p>A Dark Lord boss with its own health, movement,
+              and attack behavior.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">06</span>
+            <h3>Character Art</h3>
+            <p>Pixel-art characters and animation assets used to
+              bring the knight and enemies to life.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEVELOPMENT -->
+    <section>
+      <div class="container">
+        <p class="section-label">Behind the Scenes</p>
+        <h2>Development Process</h2>
+
+        <p class="section-intro">
+          The game is developed in stages, from implementing
+          character behavior to testing gameplay interactions.
+        </p>
+
+        <div class="process-grid">
+          <article class="card">
+            <span class="card-number">01</span>
+            <h3>Character Sprites and Animation</h3>
+            <p>Preparing pixel-art characters and connecting
+              animation states to player actions.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">02</span>
+            <h3>Gameplay Programming</h3>
+            <p>Using C# scripts to implement movement, jumping,
+              combat, health, and enemy behavior.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">03</span>
+            <h3>Enemy Implementation</h3>
+            <p>Configuring enemy detection, movement, attacks,
+              health, and defeat behavior.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">04</span>
+            <h3>Testing and Debugging</h3>
+            <p>Testing collisions, animation transitions, damage,
+              and interactions with platforms and objects.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHALLENGES -->
+    <section>
+      <div class="container">
+        <p class="section-label">Problem Solving</p>
+        <h2>Challenges and Learnings</h2>
+
+        <div class="challenge-grid">
+          <article class="card">
+            <h3>Animation Integration</h3>
+            <p>Connecting player input with animation states
+              requires careful timing so movement, attacks,
+              and defense work correctly together.</p>
+          </article>
+
+          <article class="card">
+            <h3>Physics and Collisions</h3>
+            <p>Platforms, movable objects, and disappearing tiles
+              make it important to test jumping and ground
+              detection in different situations.</p>
+          </article>
+
+          <article class="card">
+            <h3>Enemy Interactions</h3>
+            <p>Enemy detection, attack ranges, damage, and health
+              need to work together to create consistent gameplay.</p>
+          </article>
+
+          <article class="card">
+            <h3>Testing and Improvement</h3>
+            <p>Repeated testing helps identify problems and improve
+              how different game systems work together.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- TECHNOLOGIES -->
+    <section>
+      <div class="container">
+        <p class="section-label">Development Tools</p>
+        <h2>Technologies Used</h2>
+
+        <p class="section-intro">
+          Tools used for game programming and preparing
+          character artwork.
+        </p>
+
+        <div class="tags">
+          <span>Unity</span>
+          <span>C#</span>
+          <span>Unity Animator</span>
+          <span>Rigidbody2D</span>
+          <span>2D Colliders</span>
+          <span>Unity UI</span>
+          <span>GIMP</span>
+          <span>Pixel Art</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT INFORMATION -->
+    <section>
+      <div class="container">
+        <p class="section-label">Project Details</p>
+        <h2>Project Information</h2>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <small>Project Type</small>
+            <p>2D Action Platformer</p>
+          </div>
+
+          <div class="info-item">
+            <small>Game Engine</small>
+            <p>Unity</p>
+          </div>
+
+          <div class="info-item">
+            <small>Programming Language</small>
+            <p>C#</p>
+          </div>
+
+          <div class="info-item">
+            <small>My Contribution</small>
+            <p>Character sprites, animations, and gameplay mechanics</p>
+          </div>
+
+          <div class="info-item">
+            <small>Project Status</small>
+            <p class="status">In Development</p>
+          </div>
+
+          <div class="info-item">
+            <small>Current Progress</small>
+            <p>One playable map prepared for demonstration</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <p class="section-label">Let's Connect</p>
+        <h2>Interested in My Work?</h2>
+
+        <p class="section-intro">
+          I'm learning and developing projects in game
+          development and programming. Feel free to explore
+          more of my work.
+        </p>
+
+        <div class="actions">
+          <a class="button primary" href="../index.html">
+            Back to My Portfolio
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <p>Knight's Quest: Rescue the Princess</p>
+      <p>Student Game Development Project</p>
+    </div>
+  </footer>
+
+</body>
+</html>
